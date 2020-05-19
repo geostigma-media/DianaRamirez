@@ -1,94 +1,97 @@
-var forms = function () {
-
+var forms = (function () {
   var project_form = $("#project-form");
   var contact_form = $("#contact-form");
 
-
   var sendProjectForm = function () {
-
-
     if (project_form.valid()) {
-      $("#btn-send-project-form").prop('disabled', true);
+      alert("este");
+      $("#btn-send-project-form").prop("disabled", true);
 
       $.ajax({
-          type: "POST",
-          url: "https://dcrsalazar.com/enviar.php",
-          data: project_form.serialize()
-        })
-        .done(function (data) {
-          project_form[0].reset();
-          console.log(data);
+        type: "POST",
+        url: "https://dcrsalazar.com/enviar.php",
+        data: project_form.serialize(),
+      }).done(function (data) {
+        project_form[0].reset();
+        console.log(data);
 
-          $("#btn-send-project-form").prop('disabled', false);
+        $("#btn-send-project-form").prop("disabled", false);
 
-          $(".alert").fadeIn();
-          setTimeout(function () {
-            $(".alert").slideUp();
-          }, 4000);
-
-
-        });
+        $(".alert").fadeIn();
+        setTimeout(function () {
+          $(".alert").slideUp();
+        }, 4000);
+      });
     } else {
-
     }
-  }
-
+  };
 
   var sendContactForm = function () {
-
     if (contact_form.valid()) {
-
-      $("#btn-send-contact-form").prop('disabled', true);
-
-      $.ajax({
+      $("#btn-send-contact-form").prop("disabled", true);
+      let mensaje = $("#message").val();
+      let date_start = $("#date_start").val();
+      if (mensaje != "") {
+        $.ajax({
           type: "POST",
-          url: "https://dcrsalazar.com/enviar.php",
-          data: contact_form.serialize()
-        })
-        .done(function (data) {
+          //url: "https://dcrsalazar.com/enviar.php",
+          url: "enviar.php",
+          data: contact_form.serialize(),
+        }).done(function (data) {
           contact_form[0].reset();
           console.log(data);
-
-
-          $("#btn-send-contact-form").prop('disabled', false);
-
-          $(".alert").fadeIn();
+          $("#btn-send-contact-form").prop("disabled", false);
+          $(".alert-pregunta").fadeIn();
           setTimeout(function () {
-            $(".alert").slideUp();
+            $(".alert-pregunta").slideUp();
           }, 4000);
-
         });
-    } else {
-
+      }
+      if (date_start != "") {
+        $.ajax({
+          type: "POST",
+          //url: "https://dcrsalazar.com/enviar.php",
+          url: "sendcita.php",
+          data: contact_form.serialize(),
+        }).done(function (data) {
+          contact_form[0].reset();
+          console.log(data);
+          $("#btn-send-contact-form").prop("disabled", false);
+          $(".alert-cita").fadeIn();
+          $("#btnpagar").show();
+          setTimeout(function () {
+            $(".alert-cita").slideUp();
+          }, 4000);
+        });
+      }
     }
-  }
+  };
 
   /* Validación */
   var setValidationFormProject = function () {
-
     project_form.validate({
       onsubmit: false,
-      errorElement: 'span',
-      errorClass: 'has-error',
+      errorElement: "span",
+      errorClass: "has-error",
       rules: {
         nombre: {
-          required: true
+          required: true,
         },
         telefono: {
           required: true,
-          digits: true
+          digits: true,
         },
         correo: {
           required: true,
-          email: true
+          email: true,
         },
-
       },
-      errorPlacement: function (error, element) { // render error placement for each input type
+      errorPlacement: function (error, element) {
+        // render error placement for each input type
         var parent = $(element).closest(".form-group");
         var cont = $(element).parent(".input-group");
 
-        parent.addClass('has-error');
+        parent.addClass("has-error");
 
         if (cont.size() > 0) {
           cont.after(error);
@@ -100,54 +103,46 @@ var forms = function () {
         element.closest(".form-group").removeClass("has-error");
       },
     });
-
-  }
+  };
 
   var setValidationContactProject = function () {
-
     contact_form.validate({
       onsubmit: false,
-      errorElement: 'span',
-      errorClass: 'has-error',
+      errorElement: "span",
+      errorClass: "has-error",
       rules: {
         nombre: {
-          required: true
+          required: true,
         },
         correo: {
           required: true,
-          email: true
+          email: true,
         },
         telefono: {
           required: true,
-          digits: true
+          digits: true,
         },
         mensaje: {
-          required: true
+          required: true,
         },
-
       },
 
       success: function (element) {
         element.closest(".form-group").removeClass("has-error");
       },
     });
-
-  }
-
+  };
 
   return {
     init: function () {
-
       $("#btn-send-project-form").click(sendProjectForm);
       $("#btn-send-contact-form").click(sendContactForm);
 
       setValidationFormProject();
       setValidationContactProject();
-    }
-
-  }
-}();
-
+    },
+  };
+})();
 
 $(document).ready(function () {
   forms.init();

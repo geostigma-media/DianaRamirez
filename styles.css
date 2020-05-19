@@ -1,0 +1,27 @@
+body {
+  background-color: #0174df;
+}
+.clock {
+  max-width: 160px;
+  margin-top: 2em;
+  padding: 1em;
+}
+
+.clock input,
+.clock span {
+  border-color: #999;
+}
+
+form {
+  background-color: #fff;
+  margin: 10% 35%;
+  width: 30%;
+  border: 2px solid;
+  padding: 15px;
+}
+@media screen AND (max-width: 480px) {
+  form {
+    margin: 0px 3%;
+    width: 94%;
+  }
+}
