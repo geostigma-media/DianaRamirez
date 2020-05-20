@@ -1,3 +1,60 @@
+$(function () {
+  $.datepicker.regional["es"] = {
+    closeText: "Cerrar",
+    prevText: "< Ant",
+    nextText: "Sig >",
+    currentText: "Hoy",
+    monthNames: [
+      "Enero",
+      "Febrero",
+      "Marzo",
+      "Abril",
+      "Mayo",
+      "Junio",
+      "Julio",
+      "Agosto",
+      "Septiembre",
+      "Octubre",
+      "Noviembre",
+      "Diciembre",
+    ],
+    monthNamesShort: [
+      "Ene",
+      "Feb",
+      "Mar",
+      "Abr",
+      "May",
+      "Jun",
+      "Jul",
+      "Ago",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dic",
+    ],
+    dayNames: [
+      "Domingo",
+      "Lunes",
+      "Martes",
+      "Miércoles",
+      "Jueves",
+      "Viernes",
+      "Sábado",
+    ],
+    dayNamesShort: ["Dom", "Lun", "Mar", "Mié", "Juv", "Vie", "Sáb"],
+    dayNamesMin: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sá"],
+    weekHeader: "Sm",
+    dateFormat: "yy-mm-dd",
+    firstDay: 1,
+    isRTL: false,
+    showMonthAfterYear: false,
+    yearSuffix: "",
+  };
+  $.datepicker.setDefaults($.datepicker.regional["es"]);
+  $("#fecha").datepicker({
+    dateFormat: "yy-mm-dd",
+  });
+});
 var forms = (function () {
   var project_form = $("#project-form");
   var contact_form = $("#contact-form");
@@ -13,16 +70,12 @@ var forms = (function () {
         data: project_form.serialize(),
       }).done(function (data) {
         project_form[0].reset();
-        console.log(data);
-
         $("#btn-send-project-form").prop("disabled", false);
-
         $(".alert").fadeIn();
         setTimeout(function () {
           $(".alert").slideUp();
         }, 4000);
       });
-    } else {
     }
   };
 
@@ -39,7 +92,6 @@ var forms = (function () {
           data: contact_form.serialize(),
         }).done(function (data) {
           contact_form[0].reset();
-          console.log(data);
           $("#btn-send-contact-form").prop("disabled", false);
           $(".alert-pregunta").fadeIn();
           setTimeout(function () {
@@ -54,14 +106,30 @@ var forms = (function () {
           url: "sendcita.php",
           data: contact_form.serialize(),
         }).done(function (data) {
-          contact_form[0].reset();
           console.log(data);
-          $("#btn-send-contact-form").prop("disabled", false);
-          $(".alert-cita").fadeIn();
-          $("#btnpagar").show();
-          setTimeout(function () {
-            $(".alert-cita").slideUp();
-          }, 4000);
+          let error = data.replace("<br />", "ERROR");
+          //console.log(error);
+          let validacionError = error.slice(0, -189);
+          console.log(validacionError);
+
+          if (validacionError == "ERROR") {
+            //console.log("entro al malo");
+            $(".alert-error").fadeIn();
+            $("#btn-send-contact-form").prop("disabled", false);
+            setTimeout(function () {
+              $(".alert-error").slideUp();
+            }, 4000);
+          } else {
+            //console.log("entro al bueno");
+            contact_form[0].reset();
+            $("#btn-send-contact-form").prop("disabled", false);
+            $("#date_start").val("");
+            $(".alert-cita").fadeIn();
+            $("#btnpagar").show();
+            setTimeout(function () {
+              $(".alert-cita").slideUp();
+            }, 4000);
+          }
         });
       }
     }

@@ -18,6 +18,18 @@ body {
 #agendarCita {
   display: none;
 }
+.wrapper {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+}
+.wrapper > .cita {
+  width: 100% !important;
+  margin: 10px !important;
+  text-align: center !important;
+  line-height: 75px !important;
+  font-size: 30px !important;
+}
+
 ::-moz-selection {
   background: #000;
   color: #fff;

@@ -66,8 +66,7 @@ if(isset($_POST['date_start'])){
           $id_event= $createdEvent->getId();
           $link_event= $createdEvent->gethtmlLink();
         }else{
-          header("Location: https://www.youtube.com/watch?v=XZdAyB530wc");
-          return;
+          echo "Incorrecto";
         }
       }catch(Google_Service_Exception $gs){
       $m = json_decode($gs->getMessage());
@@ -110,11 +109,9 @@ if(isset($_POST['date_start'])){
       $mail->SMTPSecure = 'tls';
       $mail->Port = 587;
     
-      $fromName = $clave;
       $to = 'dyegovallejob@gmail.com';
       //$to = 'alex.geostigma@gmail.com';
       $subject = 'dcrsalazar - nuevo registro: '. $correo;
-      $message = $clave;
       $mail->From = $correo;
       $mail->FromName = $nombre;
       $mail->addAddress($to, "dcrsalazar");
